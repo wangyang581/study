@@ -1,0 +1,7 @@
+# 这个 patch 在 profile 列出本组合包时作为一层应用。
+#
+# 注意：插件按**包名**引用（不是相对源码路径），这样 Node 模块解析才能找到
+# 已安装的代码。包名与 package.json 的 "name" 一致。
+- insert:
+    - id: study-helper
+      name: dsh-study-helper

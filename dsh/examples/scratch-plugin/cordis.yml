@@ -1,0 +1,20 @@
+# 用法：
+#   pnpm dsh web --patch /绝对路径/到/deepseek-harness/examples/scratch-plugin/cordis.yml
+#
+# 把下面的 /absolute/path/to/deepseek-harness 替换成你本地 deepseek-harness
+# 仓库的绝对路径（在仓库根目录运行 `pwd` 可得到）。
+#
+# 这是插入本地插件的 Web 覆盖层：一个 patch 条目数组。
+# 插件路径必须是绝对路径——patch 文件只贡献配置，不改变 loader 解析模块路径时
+# 使用的 profile 目录。
+
+- insert:
+    # 最小插件：启动时打印 [hello-plugin] plugin loaded!
+    - id: hello
+      name: '/absolute/path/to/deepseek-harness/examples/scratch-plugin/src/my-plugin.ts'
+
+    # 带配置的工具插件：注册 greet 工具
+    - id: greet
+      name: '/absolute/path/to/deepseek-harness/examples/scratch-plugin/src/greet-tool.ts'
+      config:
+        greeting: 'Hi there'
