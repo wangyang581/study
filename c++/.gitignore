@@ -1,0 +1,4 @@
+tools/.cache/
+bin/
+*.out
+*.o

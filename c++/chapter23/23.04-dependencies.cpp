@@ -1,0 +1,122 @@
+// ==========================================================================
+// 23.4 依赖关系
+// --------------------------------------------------------------------------
+// 课程: C++学习网 · 第二十三章 对象关系
+// 原文: https://www.studycpp.cn/basic/chapter23/dependencies/
+// 说明: 教程正文以注释形式完整收录在本文件中，可对照原文学习。
+//       文末「可运行示例」取自教程代码块，已通过编译校验，可直接运行。
+// 编译: g++ -std=c++20 -Wall -Wextra "23.04-dependencies.cpp" -o /tmp/a.out && /tmp/a.out
+// ==========================================================================
+//
+// 本节内容:
+//   · 依赖与关联
+
+// ==========================================================================
+// 教程正文
+// ==========================================================================
+
+// 到目前为止，我们已经探索了3种关系类型：组合、聚合和关联。现在来看最简单的一
+// 种：依赖关系。
+//
+// 非正式地说，我们使用术语“依赖”来表示一个对象在完成某项任务时依赖另一个对象。
+// 例如，如果摔断了脚，就得依靠拐杖才能走动。花依靠蜜蜂授粉，从而结果或繁殖。
+//
+// 当一个对象调用另一个对象的功能来完成特定任务时，就会产生依赖关系。这是一种
+// 比关联更弱的关系。被依赖对象的任何更改，都可能影响调用者的正常执行。依赖关
+// 系始终是单向关系。
+//
+// std::ostream 是一个您已经见过多次的依赖关系示例。我们使用std::ostream类将内
+// 容打印到控制台。
+//
+// 例如：
+
+// [代码 1]
+// #include <iostream>
+//
+// class Point
+// {
+// private:
+//     double m_x{};
+//     double m_y{};
+//     double m_z{};
+//
+// public:
+//     Point(double x=0.0, double y=0.0, double z=0.0): m_x{x}, m_y{y}, m_z{z}
+//     {
+//     }
+//
+//     friend std::ostream& operator<< (std::ostream& out, const Point& point); // Point 依赖了 std::ostream
+// };
+//
+// std::ostream& operator<< (std::ostream& out, const Point& point)
+// {
+//     // 因为 operator<< 是 Point 的友元函数, 可以直接访问 Point 的成员变量
+//     out << "Point(" << point.m_x << ", " << point.m_y << ", " << point.m_z << ')';
+//
+//     return out;
+// }
+//
+// int main()
+// {
+//     Point point1 { 2.0, 3.0, 4.0 };
+//
+//     std::cout << point1; // 程序这里依赖了 std::cout
+//
+//     return 0;
+// }
+
+// 在上面的代码中，Point与std::ostream没有直接关系，但它依赖于std::ostream，因
+// 为 operator« 使用std::ostream将Point打印到控制台。
+//
+
+// ―――― 依赖与关联 ――――
+
+// 关于依赖关系与关联的区别，通常存在一些困惑。
+//
+// 在C++中，关联是一种关系，其中一个类会通过成员与相关联的类保持直接或间接的“
+// 链接”。例如，Doctor类可以有一个指向其Patient的指针数组作为成员。你可以随时
+// 询问医生有哪些病人。Driver类将拥有的Car的id保存为整数成员。驾驶员总是知道与
+// 自己相关联的汽车。
+//
+// 依赖对象通常不是成员。相反，被依赖的对象通常会按需实例化（例如打开一个要写
+// 入数据的文件），或作为参数传递到函数中（例如上面重载 operator« 中的
+// std::ostream）。
+//
+
+// ==========================================================================
+// 可运行示例（来自教程代码块）
+// ==========================================================================
+
+#include <iostream>
+
+class Point
+{
+private:
+    double m_x{};
+    double m_y{};
+    double m_z{};
+
+public:
+    Point(double x=0.0, double y=0.0, double z=0.0): m_x{x}, m_y{y}, m_z{z}
+    {
+    }
+
+    friend std::ostream& operator<< (std::ostream& out, const Point& point); // Point 依赖了 std::ostream
+};
+
+std::ostream& operator<< (std::ostream& out, const Point& point)
+{
+    // 因为 operator<< 是 Point 的友元函数, 可以直接访问 Point 的成员变量
+    out << "Point(" << point.m_x << ", " << point.m_y << ", " << point.m_z << ')';
+
+    return out;
+}
+
+int main()
+{
+    Point point1 { 2.0, 3.0, 4.0 };
+
+    std::cout << point1; // 程序这里依赖了 std::cout
+
+    return 0;
+}
